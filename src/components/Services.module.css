@@ -1,0 +1,186 @@
+.page {
+  background-color: var(--color-bg-dark, #0f172a);
+  min-height: 100vh;
+  color: #fff;
+  padding-bottom: 5rem;
+}
+
+/* Dynamic Hero Section */
+.hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 10rem 2rem 5rem;
+  overflow: hidden;
+}
+
+.heroBackground {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.15) 0%, transparent 60%),
+              radial-gradient(circle at 80% 100%, rgba(251, 191, 36, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-size: clamp(3rem, 6vw, 5rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 10;
+  letter-spacing: -1px;
+}
+
+.titleUnderline {
+  display: block;
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(90deg, #38bdf8, #fbbf24);
+  margin: 1.5rem auto 0;
+  border-radius: 4px;
+}
+
+.subtitle {
+  color: #94a3b8;
+  font-size: clamp(1.1rem, 2vw, 1.3rem);
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+  line-height: 1.6;
+}
+
+/* Bento Grid */
+.section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 10;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.5rem;
+  grid-auto-rows: minmax(280px, auto);
+}
+
+.card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 24px;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), background 0.4s ease, border-color 0.4s ease;
+  cursor: pointer;
+  grid-column: span 4;
+}
+
+/* Make certain cards span more columns for a bento effect */
+.card:nth-child(1), .card:nth-child(4) {
+  grid-column: span 8;
+}
+.card:nth-child(2), .card:nth-child(3), .card:nth-child(5), .card:nth-child(6) {
+  grid-column: span 4;
+}
+
+@media (max-width: 900px) {
+  .card:nth-child(1), .card:nth-child(4),
+  .card:nth-child(2), .card:nth-child(3), 
+  .card:nth-child(5), .card:nth-child(6) {
+    grid-column: span 6;
+  }
+}
+
+@media (max-width: 600px) {
+  .card:nth-child(1), .card:nth-child(4),
+  .card:nth-child(2), .card:nth-child(3), 
+  .card:nth-child(5), .card:nth-child(6) {
+    grid-column: span 12;
+  }
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.iconWrapper {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: rgba(56, 189, 248, 0.1);
+  color: #38bdf8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: auto; /* Pushes the text to the bottom */
+  transition: all 0.3s ease;
+}
+
+.card:nth-child(even) .iconWrapper {
+  background: rgba(251, 191, 36, 0.1);
+  color: #fbbf24;
+}
+
+.card:hover .iconWrapper {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.textContainer {
+  margin-top: 2rem;
+}
+
+.cardTitle {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  color: #f8fafc;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.cardDesc {
+  color: #94a3b8;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* Animations */
+.animateUp {
+  animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}

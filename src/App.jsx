@@ -6,8 +6,10 @@ import Navbar from "./components/Navbar";
 import HomePage from "./components/Homepage";
 import Footer from "./components/Footer";
 import Aboutus from "./components/Aboutus";
-import Events from "./components/Event";
+import Events from "./components/Events";
 import ContactUs from "./components/ContactUs";
+import Team from "./components/Team";
+import Services from "./components/Services";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -16,7 +18,7 @@ function App() {
       setIsLoading(false);
     }, 3000);
   }, []);
-  const words = ["Ideate.", "Inspire.", "Invest.", "Innovate."];
+  const words = ["Ideate.", "Inspire.", "Invest."];
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   useEffect(() => {
     const interval = setInterval(() => {
@@ -52,6 +54,8 @@ function App() {
               <Route path="/about" element={<Aboutus />} />
               <Route path="/events" element={<Events />} />
               <Route path="/contact" element={<ContactUs />} />
+              <Route path="/team" element={<Team />} />
+              <Route path="/services" element={<Services />} />
             </Routes>
             <Footer />
           </Router>

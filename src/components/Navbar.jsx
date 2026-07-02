@@ -1,167 +1,75 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { CSSTransition } from "react-transition-group";
-import "./Navbar.css";
+import styles from "./Navbar.module.css";
 import logo from "../public/logo.png";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [scrollPercentage, setScrollPercentage] = useState(0);
+  const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      const docHeight =
-        document.documentElement.scrollHeight -
-        document.documentElement.clientHeight;
-      const scrolled = (scrollTop / docHeight) * 100;
-      setScrollPercentage(scrolled);
+      if (window.scrollY > 50) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
     };
 
-    if (location.pathname === "/" || location.pathname === "/events") {
-      window.addEventListener("scroll", handleScroll);
-    }
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+  // Ensure scroll top on route change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    setIsMenuOpen(false);
   }, [location.pathname]);
 
-  const getBackgroundColor = () => {
-    const adjustedScroll = Math.max(0, scrollPercentage - 8.5); // Start changing opacity from 15%
-    const opacity = Math.min(adjustedScroll / 27.5, 1); // Adjust based on remaining 85%
-    return `rgba(0, 80, 127, ${opacity}), rgba(87, 184, 71, ${opacity})`; // Blue to Purple gradient
-  };
-
   return (
-    <div
-      className={`fixed px-7 p-2 shadow-md w-full z-10 top-0 ${
-        (location.pathname === "/" || location.pathname === "/events") &&
-        scrollPercentage < 15
-          ? "bg-transparent"
-          : ""
-      }`}
-      style={{
-        background:
-          location.pathname === "/" || location.pathname === "/events"
-            ? `linear-gradient(to right, ${getBackgroundColor()})`
-            : "linear-gradient(to right, #1b75bb, #57b847)",
-      }}
-    >
-      <div className="mx-auto flex justify-between items-center">
-        <div>
-          <Link to="/">
-            <img className="h-14" src={logo} alt="Logo" />
-          </Link>
-        </div>
+    <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ""}`}>
+      <Link to="/" className={styles.logo}>
+        <img src={logo} alt="E-Cell MSIT Logo" />
+      </Link>
 
-        {/* Desktop Navbar Links */}
-        <div className="hidden md:flex space-x-6 text-lg">
-          <Link
-            to="/"
-            className="text-white hover:text-yellow-400 transition duration-300 no-underline hover:underline underline-offset-2"
-          >
-            Home
-          </Link>
-          <Link
-            to="/about"
-            className="text-white hover:text-yellow-400 transition duration-300 no-underline hover:underline underline-offset-2"
-          >
-            About
-          </Link>
-          <Link
-            to="/events"
-            className="text-white hover:text-yellow-400 transition duration-300 no-underline hover:underline underline-offset-2"
-          >
-            Events
-          </Link>
-          <Link
-            to="/contact"
-            className="text-white hover:text-yellow-400 transition duration-300 no-underline hover:underline underline-offset-2"
-          >
-            Contact
-          </Link>
-        </div>
-
-        {/* Hamburger/Cross Button for Mobile */}
-        <button
-          className="md:hidden text-white"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-          {isMenuOpen ? (
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          ) : (
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          )}
-        </button>
+      {/* Desktop Links */}
+      <div className={styles.navLinks}>
+        <Link to="/" className={styles.navLink}>Home</Link>
+        <Link to="/about" className={styles.navLink}>About</Link>
+        <Link to="/team" className={styles.navLink}>Team</Link>
+        <Link to="/services" className={styles.navLink}>Services</Link>
+        <Link to="/events" className={styles.navLink}>Events</Link>
+        <Link to="/contact" className={styles.navLink}>Contact</Link>
       </div>
 
-      {/* Mobile Menu */}
-      <CSSTransition
-        in={isMenuOpen}
-        timeout={200}
-        classNames="mobile-menu"
-        unmountOnExit
+      {/* Mobile Menu Toggle */}
+      <button 
+        className={styles.hamburger} 
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+        aria-label="Toggle menu"
       >
-        <div className="md:hidden bg-white p-4 my-4 space-y-4 shadow-md rounded-lg">
-          <Link
-            to="/"
-            className="block text-black hover:text-yellow-400 transition duration-300 no-underline hover:underline underline-offset-2"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            Home
-          </Link>
-          <Link
-            to="/about"
-            className="block text-black hover:text-yellow-400 transition duration-300 no-underline hover:underline underline-offset-2"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            About
-          </Link>
-          <Link
-            to="/events"
-            className="block text-black hover:text-yellow-400 transition duration-300 no-underline hover:underline underline-offset-2"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            Events
-          </Link>
-          <Link
-            to="/contact"
-            className="block text-black hover:text-yellow-400 transition duration-300 no-underline hover:underline underline-offset-2"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            Contact
-          </Link>
-        </div>
-      </CSSTransition>
-    </div>
+        {isMenuOpen ? (
+          <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        ) : (
+          <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        )}
+      </button>
+
+      {/* Mobile Menu */}
+      <div className={`${styles.mobileMenu} ${isMenuOpen ? styles.open : ""}`}>
+        <Link to="/" className={styles.mobileLink} onClick={() => setIsMenuOpen(false)}>Home</Link>
+        <Link to="/about" className={styles.mobileLink} onClick={() => setIsMenuOpen(false)}>About</Link>
+        <Link to="/team" className={styles.mobileLink} onClick={() => setIsMenuOpen(false)}>Team</Link>
+        <Link to="/services" className={styles.mobileLink} onClick={() => setIsMenuOpen(false)}>Services</Link>
+        <Link to="/events" className={styles.mobileLink} onClick={() => setIsMenuOpen(false)}>Events</Link>
+        <Link to="/contact" className={styles.mobileLink} onClick={() => setIsMenuOpen(false)}>Contact</Link>
+      </div>
+    </nav>
   );
 };
 
