@@ -9,6 +9,7 @@ import Aboutus from "./components/Aboutus";
 import Events from "./components/Events";
 import ContactUs from "./components/ContactUs";
 import Team from "./components/Team";
+import AdminPage from "./components/Admin";
 import Services from "./components/Services";
 
 function App() {
@@ -55,6 +56,7 @@ function App() {
               <Route path="/events" element={<Events />} />
               <Route path="/contact" element={<ContactUs />} />
               <Route path="/team" element={<Team />} />
+              <Route path="/admin" element={<AdminPage />} />
               <Route path="/services" element={<Services />} />
             </Routes>
             <Footer />

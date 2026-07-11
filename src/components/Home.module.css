@@ -1,6 +1,7 @@
 .page {
-  background-color: var(--color-bg);
+  background-color: var(--color-bg-dark);
   min-height: 100vh;
+  color: #f8fafc;
 }
 
 /* Base Animations */
@@ -93,14 +94,16 @@
 }
 
 .glassCard {
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.05);
   border-radius: var(--radius-xl);
   padding: 3rem;
   box-shadow: var(--shadow-md);
-  border: 1px solid rgba(0,0,0,0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   position: relative;
   overflow: hidden;
   transition: var(--transition-normal);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 
 .glassCard:hover {
@@ -115,18 +118,18 @@
   left: 0;
   width: 4px;
   height: 100%;
-  background: var(--gradient-primary);
+  background: var(--gradient-accent);
 }
 
 .cardTitle {
   font-family: var(--font-heading);
   font-size: 2rem;
-  color: var(--color-primary);
+  color: #f8fafc;
   margin-bottom: 1.5rem;
 }
 
 .cardText {
-  color: var(--color-text-muted);
+  color: #94a3b8;
   font-size: 1.1rem;
   line-height: 1.8;
 }
@@ -140,12 +143,14 @@
 }
 
 .activityCard {
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.05);
   border-radius: var(--radius-xl);
   overflow: hidden;
   box-shadow: var(--shadow-md);
   transition: var(--transition-normal);
-  border: 1px solid rgba(0,0,0,0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 
 .activityCard:hover {
@@ -171,12 +176,12 @@
 .activityTitle {
   font-family: var(--font-heading);
   font-size: 1.5rem;
-  color: var(--color-primary);
+  color: #f8fafc;
   margin-bottom: 1rem;
 }
 
 .activityDesc {
-  color: var(--color-text-muted);
+  color: #94a3b8;
   line-height: 1.6;
 }
 
@@ -184,9 +189,10 @@
 .sponsorsWrap {
   overflow: hidden;
   padding: 2rem 0;
-  background: white;
+  background: rgba(255, 255, 255, 0.03);
   border-radius: var(--radius-xl);
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .sponsorsTrack {
