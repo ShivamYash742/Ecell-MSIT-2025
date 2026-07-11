@@ -4,10 +4,12 @@ import heroVideo from "./images/hero.mp4";
 import eventsData from "../data/events.json";
 
 const initialBoxes = eventsData.map((event, index) => ({
+  id: event.id,
   title: event.title,
   description: event.detailedDescription || event.shortDescription,
   date: event.date,
   image: `/${event.images[0]}`,
+  images: event.images.map((img) => `/${img}`),
   visitors: 150 + (index * 13),
 }));
 
@@ -16,7 +18,8 @@ const galleryImages = eventsData.flatMap(event => event.images.map(img => `/${im
 const EventsPage = () => {
   const [boxes, setBoxes] = useState(initialBoxes);
   const [currentItem, setCurrentItem] = useState(3);
-  const [expandedEvent, setExpandedEvent] = useState(null);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const dialogRef = useRef(null);
   
   const observerRef = useRef(null);
 
@@ -56,9 +59,20 @@ const EventsPage = () => {
     setCurrentItem(prev => Math.min(prev + 3, boxes.length));
   };
 
-  const toggleExpand = (index) => {
-    setExpandedEvent(expandedEvent === index ? null : index);
+  const openModal = (index) => {
+    setSelectedEvent(index);
   };
+
+  const closeModal = () => {
+    setSelectedEvent(null);
+    if (dialogRef.current?.open) dialogRef.current.close();
+  };
+
+  useEffect(() => {
+    if (selectedEvent !== null && dialogRef.current && !dialogRef.current.open) {
+      dialogRef.current.showModal();
+    }
+  }, [selectedEvent]);
 
   const handleEventHover = (index) => {
     const newBoxes = [...boxes];
@@ -96,19 +110,17 @@ const EventsPage = () => {
                   <span>{box.date}</span>
                   <span>{box.visitors} Visitors</span>
                 </div>
-                
-                <div 
-                  className={styles.eventDesc} 
-                  style={{ maxHeight: expandedEvent === index ? '500px' : '4.8em' }}
-                >
+
+                <div className={styles.eventDesc} style={{ maxHeight: '4.8em' }}>
                   {box.description}
                 </div>
-                
-                <button 
-                  onClick={() => toggleExpand(index)} 
+
+                <button
+                  type="button"
+                  onClick={() => openModal(index)}
                   className={styles.toggleBtn}
                 >
-                  {expandedEvent === index ? "Read Less" : "Read More"}
+                  Read More
                 </button>
               </div>
             </div>
@@ -139,7 +151,34 @@ const EventsPage = () => {
           ))}
         </div>
       </div>
-      
+
+      {selectedEvent !== null && boxes[selectedEvent] && (
+        <dialog
+          ref={dialogRef}
+          className={styles.modal}
+          onClick={(e) => { if (e.target === dialogRef.current) closeModal(); }}
+        >
+          <div className={styles.modalContent}>
+            <button type="button" className={styles.modalClose} onClick={closeModal} aria-label="Close">&times;</button>
+            <div className={styles.modalImages}>
+              {boxes[selectedEvent].images.map((img, i) => (
+                <img key={i} src={img} alt={`${boxes[selectedEvent].title} ${i + 1}`} className={styles.modalImage} />
+              ))}
+            </div>
+            <h2 className={styles.modalTitle}>{boxes[selectedEvent].title}</h2>
+            <div className={styles.modalMeta}>
+              <span>{boxes[selectedEvent].date}</span>
+              <span>{boxes[selectedEvent].visitors} Visitors</span>
+            </div>
+            {/* ponytail: events.json is repo-owned (not user input). <br>/<b> tags trusted. */}
+            <div
+              className={styles.modalDesc}
+              dangerouslySetInnerHTML={{ __html: boxes[selectedEvent].description }}
+            />
+          </div>
+        </dialog>
+      )}
+
     </div>
   );
 };
